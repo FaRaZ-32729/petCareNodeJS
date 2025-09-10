@@ -5,7 +5,7 @@ configDotenv();
 const db_Connection = async () => {
     try {
         await mongoose.connect(process.env.MONGO_DB_STRING, {
-            dbName: "petsCare"
+            // dbName: "petsCare"
         });
         console.log("Database Connected Successfully");
     } catch (error) {

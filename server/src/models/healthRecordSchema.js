@@ -22,5 +22,7 @@ const healthRecordSchema = new mongoose.Schema({
     },
     updatedAt: { type: Date, default: Date.now }
 });
+
 healthRecordModel =mongoose.model('HealthRecord', healthRecordSchema) ;
+
 module.exports = healthRecordModel ;

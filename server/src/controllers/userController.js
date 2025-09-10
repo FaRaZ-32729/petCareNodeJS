@@ -63,4 +63,41 @@ const register = async (req, res) => {
         });
     }
 };
-module.exports = { register };
+
+const deleteuser = async (req, res) => {
+    try {
+        const {email} = req.body; 
+
+        if (!email) {
+            return res.status(400).json({
+                message: "Email is required",
+                isDeleted: false
+            });
+        }
+
+        const result = await userModel.deleteOne({ email });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({
+                message: "User not found",
+                isDeleted: false
+            });
+        }
+
+        return res.status(200).json({
+            message: "User account deleted successfully",
+            isDeleted: true
+        });
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            message: error.message,
+            isDeleted: false
+        });
+    }
+};
+
+
+
+module.exports = { register,deleteuser };
