@@ -13,11 +13,12 @@ const adoptablePetSchema = new mongoose.Schema({
     }],
     shelterId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Shelter',
+        ref: 'User',
         required: true
     },
     isAdopted: { type: Boolean, default: false },
 }, { timestamps: true });
 
 const adoptablePetModel = mongoose.model('AdoptablePet', adoptablePetSchema)
+
 module.exports = adoptablePetModel;

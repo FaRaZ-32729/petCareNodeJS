@@ -16,6 +16,7 @@ const notificationRoute = require("./src/routes/notificationRoute.js");
 const reviewAndRatingRoute = require("./src/routes/reviewAndRatingRoute.js");
 const treatmentLogRoute = require("./src/routes/treatmentLogRoute.js");
 const vetRoute = require("./src/routes/vetRoute.js");
+const feedbackroute = require("./src/routes/feedbackRoute.js");
 
 
 configDotenv();
@@ -44,7 +45,7 @@ app.use("/notifications", notificationRoute);
 app.use("/reviews-rating", reviewAndRatingRoute);
 app.use("/treatment", treatmentLogRoute);
 app.use("/vet", vetRoute);
-
+app.use("/ai",feedbackroute)
 
 
 
