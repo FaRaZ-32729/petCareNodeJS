@@ -1,5 +1,6 @@
 const { configDotenv } = require("dotenv");
 const express = require("express");
+const cors = require("cors");
 const db_Connection = require("./src/config/db_Connection.js");
 const userRouter = require("./src/routes/userRoute.js");
 const cookieParser = require("cookie-parser");
@@ -26,6 +27,10 @@ const PORT = process.env.PORT;
 
 //middlewares 
 app.use(express.json());
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
 app.use(cookieParser())
 
 
@@ -45,7 +50,7 @@ app.use("/notifications", notificationRoute);
 app.use("/reviews-rating", reviewAndRatingRoute);
 app.use("/treatment", treatmentLogRoute);
 app.use("/vet", vetRoute);
-app.use("/ai",feedbackroute)
+app.use("/ai", feedbackroute)
 
 
 

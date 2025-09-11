@@ -1,6 +1,7 @@
 const userModel = require("../models/userSchema");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 
+// Register user
 const register = async (req, res) => {
     try {
         const { name, contactNumber, email, address, role, password } = req.body;
@@ -13,7 +14,10 @@ const register = async (req, res) => {
         }
 
         if (password.length < 6) {
-            return res.status(400).json({ message: "Password must be at least 6 characters long", isSave: false });
+            return res.status(400).json({
+                message: "Password must be at least 6 characters long",
+                isSave: false
+            });
         }
 
         const validRoles = ["owner", "vet", "shelter", "admin"];
@@ -43,7 +47,6 @@ const register = async (req, res) => {
             password: hashedPass
         });
 
-
         return res.status(201).json({
             message: "User Registered Successfully",
             isSave: true,
@@ -64,40 +67,76 @@ const register = async (req, res) => {
     }
 };
 
-const deleteuser = async (req, res) => {
+// Delete user
+const deleteUser = async (req, res) => {
     try {
-        const {email} = req.body; 
+        const { id } = req.params; // ✅ get id from URL params
 
-        if (!email) {
+        if (!id) {
             return res.status(400).json({
-                message: "Email is required",
-                isDeleted: false
+                message: "User ID not provided",
+                isDeleted: false,
             });
         }
 
-        const result = await userModel.deleteOne({ email });
+        const result = await userModel.findByIdAndDelete(id); // ✅ delete by _id
 
-        if (result.deletedCount === 0) {
+        if (!result) {
             return res.status(404).json({
                 message: "User not found",
-                isDeleted: false
+                isDeleted: false,
             });
         }
 
         return res.status(200).json({
             message: "User account deleted successfully",
-            isDeleted: true
+            isDeleted: true,
         });
 
     } catch (error) {
-        console.error(error.message);
+        console.error("Error deleting user:", error.message);
         return res.status(500).json({
             message: error.message,
-            isDeleted: false
+            isDeleted: false,
         });
     }
 };
 
 
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await userModel.find().select("-password");
+        return res.status(200).json({
+            message: "Users fetched successfully",
+            count: users.length,
+            users
+        });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({ message: error.message });
+    }
+};
 
-module.exports = { register,deleteuser };
+const getUserById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const user = await userModel.findById(id).select("-password");
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json({ user });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
+module.exports = {
+    register,
+    deleteUser,
+    getAllUsers,
+    getUserById,
+};

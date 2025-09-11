@@ -1,9 +1,12 @@
 const express = require("express");
-const { register, deleteuser } = require("../controllers/userController.js");
+const { register,  getAllUsers, getUserById, deleteUser } = require("../controllers/userController.js");
+const verifyToken = require("../Middlwares/verifytokenMiddleware.js");
 
 const router = express.Router();
 
 router.post("/signup", register);
-router.delete('/userdelete',deleteuser)
+router.delete('/:id', deleteUser)
+router.get("/", getAllUsers);
+router.get("/getuser", verifyToken, getUserById);
 
-module.exports = router;
+module.exports = router
